@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import classes from "./DeviceDetails.module.css";
 import Input from "./Input";
+import NotificationContext from "../store/notification-context";
+import { editDevices } from "../hooks/api-util";
 
-const DeviceDetails = ({ device_data, onDelete, id, onEdit }) => {
+const DeviceDetails = ({ device_data, onDelete, id }) => {
+  const notificationCtx = useContext(NotificationContext);
   const [toggleEdit, setToggleEdit] = useState(false);
   const [enteredName, setEnteredName] = useState("");
   const [enteredOwnerName, setEnteredOwnerName] = useState("");
@@ -12,19 +15,46 @@ const DeviceDetails = ({ device_data, onDelete, id, onEdit }) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    const deviceInfo = {
-      id,
-      device_name: enteredName,
-      owner: enteredOwnerName,
-      battery_status: enteredBatteryStatus,
-      device_type: enteredDeviceType,
-    };
+    if (
+      enteredName.trim() === "" ||
+      enteredOwnerName.trim() === "" ||
+      enteredBatteryStatus < 10 ||
+      enteredDeviceType.trim() === ""
+    ) {
+      alert("Invalid");
+    } else {
+      const deviceInfo = {
+        id,
+        device_name: enteredName,
+        owner: enteredOwnerName,
+        battery_status: enteredBatteryStatus,
+        device_type: enteredDeviceType,
+      };
 
-    onEdit(deviceInfo);
-    setEnteredName("");
-    setEnteredBatteryStatus("");
-    setEnteredDeviceType("");
-    setEnteredOwnerName("");
+      editHandler(deviceInfo);
+      setEnteredName("");
+      setEnteredBatteryStatus("");
+      setEnteredDeviceType("");
+      setEnteredOwnerName("");
+    }
+  };
+
+  const editHandler = async (deviceInfo) => {
+    try {
+      await editDevices(deviceInfo);
+      notificationCtx.showNotification({
+        title: "Success",
+        message: "Successfully updated device",
+        status: "success",
+      });
+      window.location.reload(true);
+    } catch (error) {
+      notificationCtx.showNotification({
+        title: "Error!",
+        message: "Failed to update device",
+        status: "error",
+      });
+    }
   };
 
   return (

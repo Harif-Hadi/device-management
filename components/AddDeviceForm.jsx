@@ -2,8 +2,9 @@ import { useContext, useRef } from "react";
 import classes from "./AddDeviceForm.module.css";
 import Input from "./Input";
 import NotificationContext from "../store/notification-context";
+import { sendDeviceData } from "../hooks/api-util";
 
-const AddDeviceForm = ({ onAdd, hideDeviceForm }) => {
+const AddDeviceForm = ({ hideDeviceForm }) => {
   const notificationCtx = useContext(NotificationContext);
 
   const deviceNameInputRef = useRef();
@@ -11,7 +12,7 @@ const AddDeviceForm = ({ onAdd, hideDeviceForm }) => {
   const batteryStatusInputRef = useRef();
   const deviceTypeInputRef = useRef();
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     const enteredDeviceName = deviceNameInputRef.current.value;
@@ -35,27 +36,21 @@ const AddDeviceForm = ({ onAdd, hideDeviceForm }) => {
         device_type: enteredDeviceType,
       };
 
-      fetch("/api/device", {
-        method: "PUT",
-        body: JSON.stringify(deviceInfo),
-        headers: { "Content-Type": "application/json" },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          notificationCtx.showNotification({
-            title: "Success",
-            message: "Successfully sent device data",
-            status: "success",
-          });
-          window.location.reload(true);
-        })
-        .catch((error) => {
-          notificationCtx.showNotification({
-            status: "error",
-            title: "Error!",
-            message: "Failed to send data",
-          });
+      try {
+        await sendDeviceData(deviceInfo);
+        notificationCtx.showNotification({
+          title: "Success",
+          message: "Successfully sent device data",
+          status: "success",
         });
+        window.location.reload(true);
+      } catch (error) {
+        notificationCtx.showNotification({
+          status: "error",
+          title: "Error!",
+          message: "Failed to send data",
+        });
+      }
 
       deviceNameInputRef.current.value = "";
       ownerNameInputRef.current.value = "";

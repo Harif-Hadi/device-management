@@ -3,7 +3,7 @@ import { useState } from "react";
 import DeviceDetails from "./DeviceDetails";
 import classes from "./Device.module.css";
 
-const Device = ({ devices, name, id, onDelete, onEdit }) => {
+const Device = ({ devices, name, id, onDelete }) => {
   const [showDeviceDetails, setShowDeviceDetails] = useState(false);
 
   return (
@@ -16,12 +16,7 @@ const Device = ({ devices, name, id, onDelete, onEdit }) => {
       </div>
 
       {showDeviceDetails && (
-        <DeviceDetails
-          device_data={devices}
-          id={id}
-          onDelete={onDelete}
-          onEdit={onEdit}
-        />
+        <DeviceDetails device_data={devices} id={id} onDelete={onDelete} />
       )}
     </div>
   );

@@ -1,9 +1,8 @@
 import { MongoClient, ObjectId } from "mongodb";
 
 const handler = async (req, res) => {
-  const client = await MongoClient.connect(
-    "mongodb+srv://hadi4harif:6NzY3DldcGbtCSZi@cluster0.z1pvfed.mongodb.net/devices?retryWrites=true&w=majority"
-  );
+  const client = await MongoClient.connect(process.env.MONGO_CONNECT_URL);
+
   const device = req.body;
 
   if (req.method === "PUT") {

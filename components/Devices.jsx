@@ -2,85 +2,60 @@ import { useContext, useEffect, useState } from "react";
 import Device from "./Device";
 import classes from "./Devices.module.css";
 import NotificationContext from "../store/notification-context";
+import { deleteDevices, editDevices, fetchDeviceData } from "../hooks/api-util";
 
 const Devices = () => {
   const notificationCtx = useContext(NotificationContext);
   const [devices, setDevices] = useState([]);
 
   useEffect(() => {
-    notificationCtx.showNotification({
-      title: "Loading...",
-      message: "Loading device data",
-      status: "pending",
-    });
-    fetch("/api/device")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetch = async () => {
+      notificationCtx.showNotification({
+        title: "Loading...",
+        message: "Loading device data",
+        status: "pending",
+      });
+
+      try {
+        const data = await fetchDeviceData();
+        console.log(data);
         setDevices(data.devices);
         notificationCtx.showNotification({
           title: "Success!",
           status: "success",
           message: "Successfully loaded device data",
         });
-      })
-      .catch((error) => {
+      } catch (error) {
         notificationCtx.showNotification({
           title: "Error!",
           status: "error",
           message: "Failed to load data",
         });
-      });
+      }
+    };
+    fetch();
   }, []);
 
-  const deleteHandler = (id) => {
-    fetch(`/api/device`, {
-      method: "DELETE",
-      body: id,
-    })
-      .then((response) => response.json())
-      .then((data) =>
-        notificationCtx.showNotification({
-          title: "Success",
-          message: "Successfully deleted device",
-          status: "success",
-        })
-      )
-      .catch((error) => {
-        notificationCtx.showNotification({
-          title: "Error!",
-          message: "Failed to delete device",
-          status: "error",
-        });
+  const deleteHandler = async (id) => {
+    try {
+      await deleteDevices(id);
+      notificationCtx.showNotification({
+        title: "Success!",
+        status: "success",
+        message: "Successfully deleted device ",
       });
-
-    const newDevices = () => {
-      const deletedDevices = devices.filter((device) => device._id !== id);
-      return deletedDevices;
-    };
-    setDevices(newDevices);
-  };
-
-  const editHandler = (deviceInfo) => {
-    fetch("/api/device", {
-      method: "PATCH",
-      body: JSON.stringify(deviceInfo),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => response.json())
-      .then((data) =>
-        notificationCtx.showNotification({
-          title: "Success",
-          message: "Successfully updated device",
-          status: "success",
-        })
-      )
-      .catch((error) => {
-        notificationCtx.showNotification({
-          title: "Error!",
-          message: "Failed to update device",
-          status: "error",
-        });
+      const newDevices = () => {
+        const deletedDevices = devices.filter((device) => device._id !== id);
+        return deletedDevices;
+      };
+      setDevices(newDevices);
+    } catch (error) {
+      notificationCtx.showNotification({
+        title: "Error!",
+        status: "error",
+        message: "Failed to delete data",
       });
+    }
   };
 
   return (
@@ -98,7 +73,6 @@ const Devices = () => {
               devices={data}
               name={data.device_name}
               onDelete={deleteHandler}
-              onEdit={editHandler}
             />
           ))}
         </div>
