@@ -1,0 +1,27 @@
+.device_details h3 {
+    font-weight: 500;
+    color: whitesmoke;
+}
+
+.device_details p {
+    color: whitesmoke;
+}
+
+.device_details_actions {
+    margin-top: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+.toggle_edit_form {
+    color: #fff;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 370px) {
+    .device_details h3 {
+        font-size: 1rem;
+    }
+}

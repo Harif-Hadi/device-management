@@ -1,5 +1,5 @@
 {
-  "name": "web-shop",
+  "name": "device-management",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/font": "13.5.3",
+    "mongodb": "^6.1.0",
     "next": "13.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"

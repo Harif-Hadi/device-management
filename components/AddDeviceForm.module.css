@@ -1,0 +1,58 @@
+.controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.control {
+    margin-bottom: 1rem;
+}
+
+.control label {
+    display: block;
+    font-size: 1.08rem;
+}
+
+
+.submit_btn,
+.cancel_btn {
+    font-size: 1.08rem;
+    padding: 0.7rem 1rem;
+    width: 8rem;
+    margin-top: 0.7rem;
+    background-color: rgb(35, 35, 61);
+    border-radius: 10px;
+    cursor: pointer;
+    color: whitesmoke;
+}
+
+.form_actions {
+    display: flex;
+}
+
+.form_actions button:last-child {
+    margin-left: 1rem;
+}
+
+
+
+.submit_btn:hover,
+.cancel_btn:hover {
+    transition: all 0.7s;
+    background-color: rgba(205, 204, 204, 20%);
+    color: #474747;
+    border: 1px solid #000;
+}
+
+@media (max-width: 530px) {
+    .form_actions button:last-child {
+        margin-left: 0.2rem;
+    }
+}
+
+@media (max-width: 370px) {
+    .form_actions {
+        display: block;
+    }
+}
