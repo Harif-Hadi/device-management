@@ -47,6 +47,7 @@ const AddDeviceForm = ({ onAdd, hideDeviceForm }) => {
             message: "Successfully sent device data",
             status: "success",
           });
+          window.location.reload(true);
         })
         .catch((error) => {
           notificationCtx.showNotification({
