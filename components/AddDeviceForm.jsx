@@ -2,7 +2,7 @@ import { useContext, useRef } from "react";
 import classes from "./AddDeviceForm.module.css";
 import Input from "./Input";
 import NotificationContext from "../store/notification-context";
-import { sendDeviceData } from "../hooks/api-util";
+import { sendDeviceData } from "../helper/api-util";
 
 const AddDeviceForm = ({ hideDeviceForm }) => {
   const notificationCtx = useContext(NotificationContext);

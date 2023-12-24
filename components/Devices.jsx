@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Device from "./Device";
 import classes from "./Devices.module.css";
 import NotificationContext from "../store/notification-context";
-import { deleteDevices, editDevices, fetchDeviceData } from "../hooks/api-util";
+import { deleteDevices, fetchDeviceData } from "../helper/api-util";
 
 const Devices = () => {
   const notificationCtx = useContext(NotificationContext);
