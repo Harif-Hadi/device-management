@@ -2,7 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import Device from "./Device";
 import classes from "./Devices.module.css";
 import NotificationContext from "../store/notification-context";
-import { deleteDevices, fetchDeviceData } from "../helper/api-util";
+import {
+  deleteDevices,
+  fetchDeviceData,
+  notificationHandler,
+} from "../helper/api-util";
 
 const Devices = () => {
   const notificationCtx = useContext(NotificationContext);
@@ -10,27 +14,15 @@ const Devices = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      notificationCtx.showNotification({
-        title: "Loading...",
-        message: "Loading device data",
-        status: "pending",
-      });
+      notificationHandler("pending", notificationCtx);
 
       try {
         const data = await fetchDeviceData();
         console.log(data);
         setDevices(data.devices);
-        notificationCtx.showNotification({
-          title: "Success!",
-          status: "success",
-          message: "Successfully loaded device data",
-        });
+        notificationHandler("success", notificationCtx);
       } catch (error) {
-        notificationCtx.showNotification({
-          title: "Error!",
-          status: "error",
-          message: "Failed to load data",
-        });
+        notificationHandler("error", notificationCtx);
       }
     };
     fetch();
@@ -39,22 +31,14 @@ const Devices = () => {
   const deleteHandler = async (id) => {
     try {
       await deleteDevices(id);
-      notificationCtx.showNotification({
-        title: "Success!",
-        status: "success",
-        message: "Successfully deleted device ",
-      });
+      notificationHandler("success", notificationCtx);
       const newDevices = () => {
         const deletedDevices = devices.filter((device) => device._id !== id);
         return deletedDevices;
       };
       setDevices(newDevices);
     } catch (error) {
-      notificationCtx.showNotification({
-        title: "Error!",
-        status: "error",
-        message: "Failed to delete data",
-      });
+      notificationHandler("error", notificationCtx);
     }
   };
 

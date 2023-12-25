@@ -44,3 +44,29 @@ export async function editDevices(deviceInfo) {
     throw new Error(data.message || "Something went wrong!!");
   }
 }
+
+export const notificationHandler = (status, notificationCtx) => {
+  if (status === "pending") {
+    notificationCtx.showNotification({
+      title: "Loading...",
+      message: "Loading device data",
+      status: "pending",
+    });
+  }
+
+  if (status === "success") {
+    notificationCtx.showNotification({
+      title: "Success!",
+      status: "success",
+      message: "Successfully loaded device data",
+    });
+  }
+
+  if (status === "error") {
+    notificationCtx.showNotification({
+      title: "Error!",
+      status: "error",
+      message: "Failed to load data",
+    });
+  }
+};

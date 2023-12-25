@@ -42,18 +42,11 @@ const DeviceDetails = ({ device_data, onDelete, id }) => {
   const editHandler = async (deviceInfo) => {
     try {
       await editDevices(deviceInfo);
-      notificationCtx.showNotification({
-        title: "Success",
-        message: "Successfully updated device",
-        status: "success",
-      });
+      notificationHandler("success", notificationCtx);
+
       window.location.reload(true);
     } catch (error) {
-      notificationCtx.showNotification({
-        title: "Error!",
-        message: "Failed to update device",
-        status: "error",
-      });
+      notificationHandler("error", notificationCtx);
     }
   };
 

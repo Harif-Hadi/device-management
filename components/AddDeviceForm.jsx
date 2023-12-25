@@ -38,18 +38,10 @@ const AddDeviceForm = ({ hideDeviceForm }) => {
 
       try {
         await sendDeviceData(deviceInfo);
-        notificationCtx.showNotification({
-          title: "Success",
-          message: "Successfully sent device data",
-          status: "success",
-        });
+        notificationHandler("success", notificationCtx);
         window.location.reload(true);
       } catch (error) {
-        notificationCtx.showNotification({
-          status: "error",
-          title: "Error!",
-          message: "Failed to send data",
-        });
+        notificationHandler("error", notificationCtx);
       }
 
       deviceNameInputRef.current.value = "";
